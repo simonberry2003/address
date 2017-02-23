@@ -13,29 +13,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Address")
+@Table(name = "State")
 @Data
 @NoArgsConstructor
 @Cacheable
-public class AddressDomainObject {
+public class StateDomainObject {
 
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
 	private String id;
-
-	private String streetAddress;
-	private String suburb;
-	private String postcode;
+	private String name;
+	private String description;
 
 	@ManyToOne
-	private StateDomainObject state;
-
-	public String getStateName() {
-		return state == null ? null : state.getName();
-	}
+	private CountryDomainObject country;
 
 	public String getCountryName() {
-		return state == null ? null : state.getCountryName();
+		return country == null ? null : country.getName();
 	}
 }

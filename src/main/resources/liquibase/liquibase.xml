@@ -6,13 +6,41 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+  <changeSet id="create_country_table" author="simon">
+    <sql>
+        CREATE TABLE COUNTRY (
+        	id VARCHAR(255) PRIMARY KEY,
+	        name VARCHAR(255) UNIQUE NOT NULL,
+        	description VARCHAR(255) UNIQUE NOT NULL,
+        	CONSTRAINT U_COUNTRY UNIQUE (name, description)
+        );
+        INSERT INTO COUNTRY (id, name, description) VALUES ('673d2220561d452ebdc427cd58e70d7a', 'AU', 'Australia');
+        INSERT INTO COUNTRY (id, name, description) VALUES ('0228db4a0bb84942b9180360eaeb6146', 'US', 'United States');
+    </sql>
+  </changeSet>
+
+  <changeSet id="create_state_table" author="simon">
+    <sql>
+        CREATE TABLE STATE (
+        	id VARCHAR(255) PRIMARY KEY,
+	        name VARCHAR(255) UNIQUE NOT NULL,
+        	description VARCHAR(255) UNIQUE NOT NULL,
+	        country_id VARCHAR(255) REFERENCES COUNTRY(id) NOT NULL,
+        	CONSTRAINT U_STATE UNIQUE (name, description, country_id)
+        );
+        INSERT INTO STATE (id, name, description, country_id) VALUES ('a1a18e385b0549f6b77e14483e8ee0fd', 'SA', 'South Australia', '673d2220561d452ebdc427cd58e70d7a');
+    </sql>
+  </changeSet>
+
   <changeSet id="create_address_table" author="simon">
     <sql>
         CREATE TABLE ADDRESS (
 	        id VARCHAR(255) PRIMARY KEY,
-        	street_address VARCHAR(255) UNIQUE NOT NULL,
+        	street_address VARCHAR(255) NOT NULL,
+        	suburb VARCHAR(255) NOT NULL,
+        	state_id VARCHAR(255) REFERENCES STATE(id) NOT NULL,
         	postcode VARCHAR(255) NOT NULL,
-        	CONSTRAINT u_constraint UNIQUE (street_address, postcode)
+        	CONSTRAINT U_ADDRESS UNIQUE (street_address, suburb, state_id, postcode)
         );
     </sql>
   </changeSet>

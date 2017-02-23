@@ -3,6 +3,8 @@ package com.noq.address.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import javax.annotation.PostConstruct;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.noq.address.domain.AddressDomainObject;
+import com.noq.address.mapping.AddressDoToWoMapping;
+import com.noq.address.repository.CountryRepository;
+import com.noq.address.repository.StateRepository;
 import com.noq.address.service.AddressService;
 import com.noq.address.web.AddressWebObject;
 
@@ -27,13 +32,31 @@ import lombok.val;
 public class AddressController {
 
 	private final AddressService addressService;
+	private final CountryRepository countryRepository;
+	private final StateRepository stateRepository;
 	private final ModelMapper mapper;
+
+	@PostConstruct
+	public void init() {
+		mapper.addMappings(new AddressDoToWoMapping());
+	}
 
     @ApiOperation(value = "get-or-create", nickname = "get-or-create")
     @RequestMapping(method = POST, value = "/get-or-create", produces = "application/json")
     @ResponseBody
     public ResponseEntity<AddressWebObject> getOrCreate(@RequestBody AddressWebObject request) {
-    	val address = mapper.map(request, AddressDomainObject.class);
+
+		val address = mapper.map(request, AddressDomainObject.class);
+		val country = countryRepository.findByName(request.getCountry());
+		if (country == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		val state = stateRepository.findByNameAndCountry(request.getState(), country);
+		if (state== null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		address.setState(state);
+
     	val result = addressService.getOrCreate(address);
     	val response = result == null ? null : mapper.map(result, AddressWebObject.class);
     	return new ResponseEntity<>(response, HttpStatus.OK);

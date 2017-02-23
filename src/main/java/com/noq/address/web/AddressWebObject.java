@@ -4,7 +4,10 @@ import lombok.Data;
 
 @Data
 public class AddressWebObject {
-	private String Id;
+	private String id;
 	private String streetAddress;
+	private String suburb;
 	private String postcode;
+	private String state;
+	private String country;
 }

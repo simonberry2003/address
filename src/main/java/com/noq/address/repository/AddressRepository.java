@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.noq.address.domain.AddressDomainObject;
+import com.noq.address.domain.StateDomainObject;
 
 @Repository
 public interface AddressRepository extends CrudRepository<AddressDomainObject, String> {
@@ -16,4 +17,11 @@ public interface AddressRepository extends CrudRepository<AddressDomainObject, S
 
 	@Cacheable("address")
 	AddressDomainObject findByStreetAddressAndPostcode(String streetAddress, String postcode);
+
+	@Cacheable("address")
+	AddressDomainObject findByStreetAddressAndSuburbAndPostcodeAndState(
+		String streetAddress,
+		String suburb,
+		String postcode,
+		StateDomainObject state);
 }

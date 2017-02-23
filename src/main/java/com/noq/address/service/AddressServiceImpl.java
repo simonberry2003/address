@@ -18,7 +18,12 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public AddressDomainObject getOrCreate(AddressDomainObject address) {
 
-		val result = addressRepository.findByStreetAddressAndPostcode(address.getStreetAddress(), address.getPostcode());
+		val result = addressRepository.findByStreetAddressAndSuburbAndPostcodeAndState(
+			address.getStreetAddress(),
+			address.getSuburb(),
+			address.getPostcode(),
+			address.getState());
+
 		if (result != null) {
 			return result;
 		}
