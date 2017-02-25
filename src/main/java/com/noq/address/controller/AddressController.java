@@ -47,11 +47,11 @@ public class AddressController {
     public ResponseEntity<AddressWebObject> getOrCreate(@RequestBody AddressWebObject request) {
 
 		val address = mapper.map(request, Address.class);
-		val country = countryRepository.findByName(request.getCountry());
+		val country = countryRepository.findByName(request.getCountry().trim());
 		if (country == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		val state = stateRepository.findByNameAndCountry(request.getState(), country);
+		val state = stateRepository.findByNameAndCountry(request.getState().trim(), country);
 		if (state== null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
