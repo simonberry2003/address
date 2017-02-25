@@ -1,8 +1,8 @@
 package com.noq.address.service;
 
-import com.noq.address.domain.AddressDomainObject;
+import com.noq.address.domain.Address;
 
 public interface AddressService {
-	AddressDomainObject getOrCreate(AddressDomainObject address);
-	AddressDomainObject get(String id);
+	Address getOrCreate(Address address);
+	Address get(String id);
 }

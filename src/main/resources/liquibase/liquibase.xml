@@ -1,48 +1,73 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-  <changeSet id="create_country_table" author="simon">
-    <sql>
-        CREATE TABLE COUNTRY (
-        	id VARCHAR(255) PRIMARY KEY,
-	        name VARCHAR(255) UNIQUE NOT NULL,
-        	description VARCHAR(255) UNIQUE NOT NULL,
-        	CONSTRAINT U_COUNTRY UNIQUE (name, description)
-        );
-        INSERT INTO COUNTRY (id, name, description) VALUES ('673d2220561d452ebdc427cd58e70d7a', 'AU', 'Australia');
-        INSERT INTO COUNTRY (id, name, description) VALUES ('0228db4a0bb84942b9180360eaeb6146', 'US', 'United States');
-    </sql>
-  </changeSet>
+	<changeSet id="create_country_table" author="simon">
+		<sql>
+			CREATE TABLE country (
+			id VARCHAR(255) PRIMARY KEY,
+			name VARCHAR(255) UNIQUE NOT NULL,
+			description VARCHAR(255) UNIQUE NOT NULL,
+			CONSTRAINT u_country UNIQUE (name, description)
+			);
+			CREATE UNIQUE INDEX idx_country_name ON country(name);
+		</sql>
+	</changeSet>
 
-  <changeSet id="create_state_table" author="simon">
-    <sql>
-        CREATE TABLE STATE (
-        	id VARCHAR(255) PRIMARY KEY,
-	        name VARCHAR(255) UNIQUE NOT NULL,
-        	description VARCHAR(255) UNIQUE NOT NULL,
-	        country_id VARCHAR(255) REFERENCES COUNTRY(id) NOT NULL,
-        	CONSTRAINT U_STATE UNIQUE (name, description, country_id)
-        );
-        INSERT INTO STATE (id, name, description, country_id) VALUES ('a1a18e385b0549f6b77e14483e8ee0fd', 'SA', 'South Australia', '673d2220561d452ebdc427cd58e70d7a');
-    </sql>
-  </changeSet>
+	<changeSet author="simon" id="load-countries" runOnChange="true">
+		<loadUpdateData 
+			encoding="UTF-8" 
+			file="src/main/resources/liquibase/countries.csv" 
+			primaryKey="id" 
+			schemaName="public" 
+			tableName="country">
+			<column name="id" type="string" />
+			<column name="name" type="string" />
+			<column name="description" type="string" />
+		</loadUpdateData>
+	</changeSet>
 
-  <changeSet id="create_address_table" author="simon">
-    <sql>
-        CREATE TABLE ADDRESS (
-	        id VARCHAR(255) PRIMARY KEY,
-        	street_address VARCHAR(255) NOT NULL,
-        	suburb VARCHAR(255) NOT NULL,
-        	state_id VARCHAR(255) REFERENCES STATE(id) NOT NULL,
-        	postcode VARCHAR(255) NOT NULL,
-        	CONSTRAINT U_ADDRESS UNIQUE (street_address, suburb, state_id, postcode)
-        );
-    </sql>
-  </changeSet>
+	<changeSet id="create_state_table" author="simon">
+		<sql>
+			CREATE TABLE state (
+			id VARCHAR(255) PRIMARY KEY,
+			name VARCHAR(255) UNIQUE NOT NULL,
+			description VARCHAR(255) UNIQUE NOT NULL,
+			country_id VARCHAR(255) REFERENCES COUNTRY(id) NOT NULL,
+			CONSTRAINT u_state UNIQUE (name, description, country_id)
+			);
+			CREATE UNIQUE INDEX idx_state_name_country ON state(name, country_id);
+		</sql>
+	</changeSet>
+
+	<changeSet author="simon" id="load-states" runOnChange="true">
+		<loadUpdateData 
+			encoding="UTF-8" 
+			file="src/main/resources/liquibase/states.csv" 
+			primaryKey="id" 
+			schemaName="public" 
+			tableName="state">
+			<column name="id" type="string" />
+			<column name="name" type="string" />
+			<column name="description" type="string" />
+			<column name="country_id" type="string" />
+		</loadUpdateData>
+	</changeSet>
+
+	<changeSet id="create_address_table" author="simon">
+		<sql>
+			CREATE TABLE address (
+			id VARCHAR(255) PRIMARY KEY,
+			street_address VARCHAR(255) NOT NULL,
+			suburb VARCHAR(255) NOT NULL,
+			state_id VARCHAR(255) REFERENCES STATE(id) NOT NULL,
+			postcode VARCHAR(255) NOT NULL,
+			CONSTRAINT u_address UNIQUE (street_address, suburb, state_id, postcode)
+			);
+		</sql>
+	</changeSet>
 
 </databaseChangeLog>

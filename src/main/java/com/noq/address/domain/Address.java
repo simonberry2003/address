@@ -9,6 +9,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.noq.jpa.Hashable;
+import com.noq.jpa.Md5IdGenerator;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,11 +20,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Cacheable
-public class AddressDomainObject {
+public class Address implements Hashable {
 
 	@Id
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy = "uuid")
+	@GenericGenerator(name = "md5_hash", strategy = "com.noq.jpa.Md5IdGenerator")
+	@GeneratedValue(generator = "md5_hash")
 	private String id;
 
 	private String streetAddress;
@@ -29,13 +32,25 @@ public class AddressDomainObject {
 	private String postcode;
 
 	@ManyToOne
-	private StateDomainObject state;
+	private State state;
 
 	public String getStateName() {
-		return state == null ? null : state.getName();
+		return state.getName();
 	}
 
 	public String getCountryName() {
-		return state == null ? null : state.getCountryName();
+		return state.getCountryName();
+	}
+
+	public String getId() {
+		if (id == null) {
+			id = Md5IdGenerator.generate(this);
+		}
+		return id;
+	}
+
+	@Override
+	public String getHashString() {
+		return streetAddress + suburb + postcode + state.getHashString();
 	}
 }

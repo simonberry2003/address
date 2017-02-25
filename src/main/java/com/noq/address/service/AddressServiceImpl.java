@@ -3,7 +3,7 @@ package com.noq.address.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.noq.address.domain.AddressDomainObject;
+import com.noq.address.domain.Address;
 import com.noq.address.repository.AddressRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,14 +16,9 @@ public class AddressServiceImpl implements AddressService {
 	private final AddressRepository addressRepository;
 
 	@Override
-	public AddressDomainObject getOrCreate(AddressDomainObject address) {
+	public Address getOrCreate(Address address) {
 
-		val result = addressRepository.findByStreetAddressAndSuburbAndPostcodeAndState(
-			address.getStreetAddress(),
-			address.getSuburb(),
-			address.getPostcode(),
-			address.getState());
-
+		val result = addressRepository.findOne(address.getId());
 		if (result != null) {
 			return result;
 		}
@@ -36,7 +31,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public AddressDomainObject get(String id) {
+	public Address get(String id) {
 		return addressRepository.findOne(id);
 	}
 }

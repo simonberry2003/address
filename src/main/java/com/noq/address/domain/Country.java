@@ -4,20 +4,21 @@ import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.noq.jpa.Hashable;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "State")
+@Table(name = "Country")
 @Data
 @NoArgsConstructor
 @Cacheable
-public class StateDomainObject {
+public class Country implements Hashable {
 
 	@Id
 	@GeneratedValue(generator="system-uuid")
@@ -26,10 +27,8 @@ public class StateDomainObject {
 	private String name;
 	private String description;
 
-	@ManyToOne
-	private CountryDomainObject country;
-
-	public String getCountryName() {
-		return country == null ? null : country.getName();
+	@Override
+	public String getHashString() {
+		return name;
 	}
 }

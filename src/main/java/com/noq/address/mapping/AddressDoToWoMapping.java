@@ -2,10 +2,10 @@ package com.noq.address.mapping;
 
 import org.modelmapper.PropertyMap;
 
-import com.noq.address.domain.AddressDomainObject;
+import com.noq.address.domain.Address;
 import com.noq.address.web.AddressWebObject;
 
-public class AddressDoToWoMapping extends PropertyMap<AddressDomainObject, AddressWebObject> {
+public class AddressDoToWoMapping extends PropertyMap<Address, AddressWebObject> {
 
 	@Override
 	protected void configure() {

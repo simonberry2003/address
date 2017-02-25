@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.noq.address.domain.AddressDomainObject;
+import com.noq.address.domain.Address;
 import com.noq.address.mapping.AddressDoToWoMapping;
 import com.noq.address.repository.CountryRepository;
 import com.noq.address.repository.StateRepository;
@@ -46,7 +46,7 @@ public class AddressController {
     @ResponseBody
     public ResponseEntity<AddressWebObject> getOrCreate(@RequestBody AddressWebObject request) {
 
-		val address = mapper.map(request, AddressDomainObject.class);
+		val address = mapper.map(request, Address.class);
 		val country = countryRepository.findByName(request.getCountry());
 		if (country == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

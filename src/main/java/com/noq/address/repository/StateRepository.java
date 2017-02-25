@@ -4,15 +4,15 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 
-import com.noq.address.domain.CountryDomainObject;
-import com.noq.address.domain.StateDomainObject;
+import com.noq.address.domain.Country;
+import com.noq.address.domain.State;
 
-public interface StateRepository extends CrudRepository<StateDomainObject, Integer>{
+public interface StateRepository extends CrudRepository<State, Integer>{
 
 	@Override
 	@CacheEvict(value = "state", allEntries = true)
-	<S extends StateDomainObject> S save(S state);
+	<S extends State> S save(S state);
 
 	@Cacheable("state")
-	StateDomainObject findByNameAndCountry(String name, CountryDomainObject country);
+	State findByNameAndCountry(String name, Country country);
 }
