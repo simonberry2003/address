@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.noq.address.domain.Address;
-import com.noq.address.mapping.AddressDoToWoMapping;
+import com.noq.address.mapping.AddressPropertyMap;
 import com.noq.address.repository.CountryRepository;
 import com.noq.address.repository.StateRepository;
 import com.noq.address.service.AddressService;
@@ -38,7 +38,7 @@ public class AddressController {
 
 	@PostConstruct
 	public void init() {
-		mapper.addMappings(new AddressDoToWoMapping());
+		mapper.addMappings(new AddressPropertyMap());
 	}
 
     @ApiOperation(value = "get-or-create", nickname = "get-or-create")

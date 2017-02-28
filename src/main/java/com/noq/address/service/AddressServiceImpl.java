@@ -18,7 +18,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public Address getOrCreate(Address address) {
 
-		val result = addressRepository.findOne(address.getId());
+		val result = get(address.getId());
 		if (result != null) {
 			return result;
 		}
@@ -26,7 +26,7 @@ public class AddressServiceImpl implements AddressService {
 		try {
 			return addressRepository.save(address);
 		} catch (Exception e) {
-			return addressRepository.findOne(address.getId());
+			return get(address.getId());
 		}
 	}
 

@@ -5,7 +5,7 @@ import org.modelmapper.PropertyMap;
 import com.noq.address.domain.Address;
 import com.noq.address.web.AddressWebObject;
 
-public class AddressDoToWoMapping extends PropertyMap<Address, AddressWebObject> {
+public class AddressPropertyMap extends PropertyMap<Address, AddressWebObject> {
 
 	@Override
 	protected void configure() {
