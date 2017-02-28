@@ -13,7 +13,7 @@ public class Md5IdGeneratorTest {
 	public void test() {
 		val session = Mockito.mock(SessionImplementor.class);
 		val object = Mockito.mock(Hashable.class);
-		Mockito.when(object.getHashString()).thenReturn("hash");
+		Mockito.when(object.getHash()).thenReturn("hash");
 		val generator = new Md5IdGenerator();
 		Assert.assertEquals("0800fc577294c34e0b28ad2839435945", generator.generate(session, object));
 	}

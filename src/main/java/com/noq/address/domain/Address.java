@@ -50,7 +50,7 @@ public class Address implements Hashable {
 	}
 
 	@Override
-	public String getHashString() {
-		return streetAddress + suburb + postcode + state.getHashString();
+	public String getHash() {
+		return streetAddress + suburb + postcode + state.getHash();
 	}
 }

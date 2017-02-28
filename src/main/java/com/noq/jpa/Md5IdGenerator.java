@@ -29,7 +29,7 @@ public class Md5IdGenerator implements IdentifierGenerator {
 		Preconditions.checkNotNull(object);
 		try {
 			val hashable = (Hashable) object;
-			byte[] bytesOfMessage = hashable.getHashString().getBytes("UTF-8");
+			byte[] bytesOfMessage = hashable.getHash().getBytes("UTF-8");
 			byte[] thedigest = md.digest(bytesOfMessage);
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < thedigest.length; i++) {

@@ -36,7 +36,7 @@ public class State implements Hashable {
 	}
 
 	@Override
-	public String getHashString() {
-		return name + country.getHashString();
+	public String getHash() {
+		return name + country.getHash();
 	}
 }

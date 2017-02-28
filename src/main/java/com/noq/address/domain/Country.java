@@ -28,7 +28,7 @@ public class Country implements Hashable {
 	private String description;
 
 	@Override
-	public String getHashString() {
+	public String getHash() {
 		return name;
 	}
 }
