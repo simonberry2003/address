@@ -26,7 +26,7 @@ public class AddressServiceImpl implements AddressService {
 		try {
 			return addressRepository.save(address);
 		} catch (Exception e) {
-			return addressRepository.findByStreetAddressAndPostcode(address.getStreetAddress(), address.getPostcode());
+			return addressRepository.findOne(address.getId());
 		}
 	}
 
